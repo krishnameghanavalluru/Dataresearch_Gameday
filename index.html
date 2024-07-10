@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Facebook Login Example</title>
+  </head>
+  <body>
+    <h2>Add Facebook Login to your webpage</h2>
+    <p id="profile"></p>
+
+    <script>
+      // Add the Facebook SDK for Javascript
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      window.fbAsyncInit = function() {
+        // Initialize the SDK with your app and the Graph API version for your app
+        FB.init({
+          appId: '1144824933487965',
+          xfbml: true,
+          version: 'v14.0'
+        });
+
+        // Login process
+        FB.login(function(response) {
+          if (response.authResponse) {
+            // User is logged in and authorized
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', {fields: 'name, email'}, function(response) {
+              document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". I see your email address is " + response.email;
+            });
+          } else {
+            // User cancelled login or did not fully authorize
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        });
+      };
+    </script>
+  </body>
+</html>
