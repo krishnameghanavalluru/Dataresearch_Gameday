@@ -6,6 +6,7 @@
 <body>
     <h2>Add Facebook Login to your webpage</h2>
     <p id="profile"></p>
+    <p id="pages"></p>
 
     <script>
         // Add the Facebook SDK for Javascript
@@ -38,6 +39,29 @@
             FB.api('/me', {fields: 'name, email'}, function(response) {
                 document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". I see your email address is " + response.email;
             });
+        }
+
+        // Function to fetch user's pages
+        function fetchUserPages(user) {
+            FB.api('/me/accounts', function(response) {
+                console.log('Fetching user pages....');
+                console.log(response);  // Log the JSON response to the console
+
+                if (response && !response.error) {
+                    displayUserPages(response.data);
+                } else {
+                    console.log('Error fetching user pages.');
+                }
+            });
+        }
+
+        // Function to display user's pages
+        function displayUserPages(pages) {
+            let pagesList = '<h3>Your Pages</h3>';
+            pages.forEach(page => {
+                pagesList += `<p>${page.name} (ID: ${page.id})</p>`;
+            });
+            document.getElementById("pages").innerHTML = pagesList;
         }
 
         window.fbAsyncInit = function() {
